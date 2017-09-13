@@ -56,6 +56,11 @@ contract Sale {
 		cap = _cap;
 	}
 
+	function softCap(uint _newend) onlyOwner {
+		require(_newend >= block.timestamp && _newend >= start && _newend <= end);
+		end = _newend;
+	}
+
 	// 1st half of ownership change
 	function changeOwner(address next) onlyOwner {
 		newOwner = next;
