@@ -98,9 +98,9 @@ contract EventDefinitions {
 
 contract Token is Finalizable, TokenReceivable, SafeMath, EventDefinitions, Pausable {
 	// Set these appropriately before you deploy
-	string constant public name = "Fix me before deploying";
+	string constant public name = "AirToken";
 	uint8 constant public decimals = 8;
-	string constant public symbol = "FIXME";
+	string constant public symbol = "AIR";
 	Controller public controller;
 	string public motd;
 	address public atFundDeposit;
@@ -189,16 +189,6 @@ contract Token is Finalizable, TokenReceivable, SafeMath, EventDefinitions, Paus
 		Transfer(msg.sender, 0x0, _amount);
 	}
 
-	// Transfer a number of AirTokens to the internal AirFox ledger address
-	// by a user's MDN, digits only including country code, no white space, dashes,
-	// plusses, or any other special characters. Encode using web3.fromAscii()
-	// with 32 bytes as the length. If you don't encode the MDN properly, they
-	// won't receive the AirTokens.
-	//
-	// Example for US number (country code 1):  16175551234
-	// web3.fromAscii("16175555555", 32);
-	// Example for UK number (country code 44): 442055551234
-	// web3.fromAscii("442055551234", 32);
 	function transferToInternalLedger(uint256 _value, bytes32 _mdn) external returns (bool success) {
 		require(atFundDeposit != 0);
 		if (transfer(atFundDeposit, _value)) {
@@ -215,9 +205,6 @@ contract Token is Finalizable, TokenReceivable, SafeMath, EventDefinitions, Paus
 		_;
 	}
 
-	// In the future, when the controller supports multiple token
-	// heads, allow the controller to reconstitute the transfer and
-	// approval history.
 
 	function controllerTransfer(address _from, address _to, uint _value) onlyController {
 		Transfer(_from, _to, _value);
@@ -271,9 +258,6 @@ contract Controller is Owned, Finalizable {
 
 	// functions below this line are onlyLedger
 
-	// let the ledger send transfer events (the most obvious case
-	// is when we mint directly to the ledger and need the Transfer()
-	// events to appear in the token)
 	function ledgerTransfer(address from, address to, uint val) onlyLedger {
 		token.controllerTransfer(from, to, val);
 	}
